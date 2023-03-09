@@ -16,6 +16,8 @@ public class Main {
 			System.out.print("명령어 > ");
 			String command = sc.nextLine();
 			
+			boolean found = false;
+			
 			/* 게시글 목록 */
 			if(command.equals("article list")){
 				if(lastArticleId == 0) {
@@ -44,8 +46,35 @@ public class Main {
 				lastArticleId++;
 				
 			/* 게시글 상세보기 */
-			} else if(command.equals("article detail")) {
-				System.out.println("게시글 상세보기");
+			} else if(command.startsWith("article detail")) {
+				/* 명령어 끊어서 비교 */
+				String[] comDiv = new String[3];
+				comDiv = command.split(" ");
+				
+//				System.out.println(comDiv[0]);
+//				System.out.println(comDiv[1]);
+//				System.out.println(comDiv[2]);
+				
+				if(comDiv.length < 3) {
+					System.out.println("명령어를 확인해주세요");
+					continue;
+				}
+				
+				int id = Integer.parseInt(comDiv[2]);
+				
+				/* 입력된 id값과 배열 위치 비교 */
+				for(int i = 0; i < articles.size(); i++) {
+					Article article = articles.get(i);
+					if(article.id == id) {
+						found = true;
+						break;
+					}
+				}
+				if(found == false) {
+					System.out.println(id + "번 게시글이 존재하지 않습니다");
+				} else {
+					System.out.println("게시글 상세보기");
+				}
 			
 			/* 게시글 수정 */
 			} else if(command.equals("article update")) {
