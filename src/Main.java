@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -5,7 +7,8 @@ public class Main {
 		/* 프로그램 시작 */
 		System.out.println("== 프로젝트 시작 ==");
 		Scanner sc = new Scanner(System.in);
-		Article[] articles = new Article[2];
+		
+		List<Article> articles = new ArrayList<>();
 		
 		int lastArticleId = 0;
 		
@@ -19,22 +22,25 @@ public class Main {
 					System.out.println("게시글이 없습니다");
 				} else {
 					System.out.println("번호 / 제목");
-					for(int i = articles.length-1; i >= 0; i--) {
-						System.out.printf("%d / %s\n", articles[i].id, articles[i].title);					
+					for(int i = articles.size()-1; i >= 0; i--) {
+						Article article = articles.get(i);
+						System.out.printf("%d / %s\n", article.id, article.title);
 					}
 				}
 			
 			/* 게시글 작성 */
 			} else if(command.equals("article write")) {
+				
 				int id = lastArticleId + 1;
 				System.out.print("제목 : ");
 				String title = sc.nextLine();
 				System.out.print("내용 : ");
 				String content = sc.nextLine();
 				
-				articles[id-1] = new Article(id, title, content);
-				System.out.println(id + "번 게시글이 생성되었습니다");
+				Article article = new Article(id, title, content);
+				articles.add(article);
 				
+				System.out.println(id + "번 게시글이 생성되었습니다");
 				lastArticleId++;
 				
 			/* 게시글 상세보기 */
@@ -68,10 +74,6 @@ class Article {
 	int id;
 	String title;
 	String content;
-	
-	Article() {
-		
-	}
 	
 	Article(int id, String title, String content){
 		this.id = id;
