@@ -16,7 +16,7 @@ public class Main {
 			System.out.print("명령어 > ");
 			String command = sc.nextLine();
 			
-			boolean found = false;
+			Article foundArticle = null;
 			
 			/* 게시글 목록 */
 			if(command.equals("article list")){
@@ -66,14 +66,14 @@ public class Main {
 				for(int i = 0; i < articles.size(); i++) {
 					Article article = articles.get(i);
 					if(article.id == id) {
-						found = true;
+						foundArticle = articles.get(i);
 						break;
 					}
 				}
-				if(found == false) {
+				if(foundArticle == null) {
 					System.out.println(id + "번 게시글이 존재하지 않습니다");
 				} else {
-					System.out.println("게시글 상세보기");
+					System.out.printf("%d\n%s\n%s\n", foundArticle.id, foundArticle.title, foundArticle.content);
 				}
 			
 			/* 게시글 수정 */
