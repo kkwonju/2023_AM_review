@@ -6,23 +6,31 @@ public class Main {
 		System.out.println("== 프로젝트 시작 ==");
 		Scanner sc = new Scanner(System.in);
 		
+		int lastArticleId = 0;
+		
 		while (true) {
 			System.out.print("명령어 > ");
 			String command = sc.nextLine();
 			
 			/* 게시글 목록 */
 			if(command.equals("article list")){
-				System.out.println("게시물 목록");
+				if(lastArticleId == 0) {
+					System.out.println("게시글이 없습니다");
+				} else {
+					System.out.println("게시글이 있습니다");
+				}
 			
 			/* 게시글 작성 */
 			} else if(command.equals("article write")) {
+				int id = lastArticleId + 1;
 				System.out.print("제목 : ");
 				String title = sc.nextLine();
 				System.out.print("내용 : ");
 				String content = sc.nextLine();
 				
-				System.out.println("1번 게시물이 생성되었습니다");
+				System.out.println(id + "번 게시글이 생성되었습니다");
 				System.out.println(title + " : " + content);
+				lastArticleId++;
 				
 			/* 게시글 상세보기 */
 			} else if(command.equals("article detail")) {
