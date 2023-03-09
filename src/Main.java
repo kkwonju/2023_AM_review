@@ -5,6 +5,7 @@ public class Main {
 		/* 프로그램 시작 */
 		System.out.println("== 프로젝트 시작 ==");
 		Scanner sc = new Scanner(System.in);
+		Article[] articles = new Article[2];
 		
 		int lastArticleId = 0;
 		
@@ -17,7 +18,10 @@ public class Main {
 				if(lastArticleId == 0) {
 					System.out.println("게시글이 없습니다");
 				} else {
-					System.out.println("게시글이 있습니다");
+					System.out.println("번호 / 제목");
+					for(int i = articles.length-1; i >= 0; i--) {
+						System.out.printf("%d / %s\n", articles[i].id, articles[i].title);					
+					}
 				}
 			
 			/* 게시글 작성 */
@@ -28,8 +32,9 @@ public class Main {
 				System.out.print("내용 : ");
 				String content = sc.nextLine();
 				
+				articles[id-1] = new Article(id, title, content);
 				System.out.println(id + "번 게시글이 생성되었습니다");
-				System.out.println(title + " : " + content);
+				
 				lastArticleId++;
 				
 			/* 게시글 상세보기 */
@@ -56,5 +61,21 @@ public class Main {
 			
 		}
 		sc.close();
+	}
+}
+
+class Article {
+	int id;
+	String title;
+	String content;
+	
+	Article() {
+		
+	}
+	
+	Article(int id, String title, String content){
+		this.id = id;
+		this.title = title;
+		this.content = content;
 	}
 }
