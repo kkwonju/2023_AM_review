@@ -77,8 +77,36 @@ public class Main {
 				}
 			
 			/* 게시글 수정 */
-			} else if(command.equals("article update")) {
-				System.out.println("게시글 수정");
+			} else if(command.startsWith("article update")) {
+
+				String[] comDiv = new String[3];
+				comDiv = command.split(" ");
+
+				if(comDiv.length < 3) {
+					System.out.println("명령어를 확인해주세요");
+					continue;
+				}
+				
+				int id = Integer.parseInt(comDiv[2]);
+				
+				/* 입력된 id값과 배열 위치 비교 */
+				for(int i = 0; i < articles.size(); i++) {
+					Article article = articles.get(i);
+					if(article.id == id) {
+						foundArticle = articles.get(i);
+						break;
+					}
+				}
+				if(foundArticle == null) {
+					System.out.println(id + "번 게시글이 존재하지 않습니다");
+				} else {
+					System.out.print("제목 : ");
+					foundArticle.title = sc.nextLine();
+					System.out.print("내용 : ");
+					foundArticle.content = sc.nextLine();
+					
+					System.out.println(foundArticle.id + "번 게시글이 수정되었습니다");
+				}
 				
 			/* 게시글 삭제 */
 			} else if(command.equals("article delete")) {
