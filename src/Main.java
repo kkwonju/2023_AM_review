@@ -3,15 +3,19 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+	static List<Article> articles = new ArrayList<>();
+	
 	public static void main(String[] args) {
+		
+		makeTestData();
+		
 		/* 프로그램 시작 */
 		System.out.println("== 프로젝트 시작 ==");
+		
 		Scanner sc = new Scanner(System.in);
 
-		List<Article> articles = new ArrayList<>();
-
-		int lastArticleId = 0;
-
+		int lastArticleId = 3;
+		
 		while (true) {
 			System.out.print("명령어 > ");
 			String command = sc.nextLine();
@@ -25,8 +29,8 @@ public class Main {
 				} else {
 					System.out.println("번호 // 제목 // 조회");
 					for (int i = articles.size() - 1; i >= 0; i--) {
-						Article article = articles.get(i);
-						System.out.printf("  %d  //  %s  //  %d \n", article.id, article.title, article.hit);
+						foundArticle = articles.get(i);
+						System.out.printf("  %d  //  %s  //  %d \n", foundArticle.id, foundArticle.title, foundArticle.hit);
 					}
 				}
 
@@ -156,6 +160,24 @@ public class Main {
 		}
 		sc.close();
 	}
+	/* 테스트 데이터 생성 */
+	static void makeTestData() {
+		/* 방법 1
+		for(int i = 1; i <= 3; i++) {
+			int id = i;
+			String title = "제목 " + i;
+			String content  = "내용 " + i;
+			String regDate = Util.getNowDateTimeStr();
+			String updateDate = Util.getNowDateTimeStr();
+			Article article = new Article(id, title, content, regDate, updateDate);
+			articles.add(article);
+		 */
+		
+		/* 방법 2 */
+		articles.add(new Article(1, "제목 1", "내용 1", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
+		articles.add(new Article(2, "제목 2", "내용 2", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
+		articles.add(new Article(3, "제목 3", "내용 3", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
+		}
 }
 
 class Article {
