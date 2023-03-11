@@ -4,33 +4,35 @@ import java.util.Scanner;
 
 public class Main {
 	static List<Article> articles = new ArrayList<>();
-	
+
 	public static void main(String[] args) {
-		
+
 		makeTestData();
-		
+
 		/* 프로그램 시작 */
 		System.out.println("== 프로젝트 시작 ==");
-		
+
 		Scanner sc = new Scanner(System.in);
 
 		int lastArticleId = 3;
-		
+
 		while (true) {
 			System.out.print("명령어 > ");
 			String command = sc.nextLine();
 
 			Article foundArticle = null;
+			int foundIndex = -1;
 
 			/* 게시글 목록 */
 			if (command.equals("article list")) {
-				if (lastArticleId == 0) {
+				if (articles.size() == 0) {
 					System.out.println("게시글이 없습니다");
 				} else {
 					System.out.println("번호 // 제목 // 조회");
 					for (int i = articles.size() - 1; i >= 0; i--) {
 						foundArticle = articles.get(i);
-						System.out.printf("  %d  //  %s  //  %d \n", foundArticle.id, foundArticle.title, foundArticle.hit);
+						System.out.printf("  %d  //  %s  //  %d \n", foundArticle.id, foundArticle.title,
+								foundArticle.hit);
 					}
 				}
 
@@ -52,10 +54,10 @@ public class Main {
 
 				/* 게시글 상세보기 */
 			} else if (command.startsWith("article detail")) {
-				
+
 				/* 명령어 끊어서 비교 */
 				String[] comDiv = new String[3];
-				
+
 				comDiv = command.split(" ");
 
 				if (comDiv.length < 3) {
@@ -65,14 +67,7 @@ public class Main {
 
 				int id = Integer.parseInt(comDiv[2]);
 
-				/* 입력된 id값과 배열 위치 비교 */
-				for (int i = 0; i < articles.size(); i++) {
-					Article article = articles.get(i);
-					if (article.id == id) {
-						foundArticle = articles.get(i);
-						break;
-					}
-				}
+				foundArticle = getArticleById(id);
 				if (foundArticle == null) {
 					System.out.println(id + "번 게시글이 존재하지 않습니다");
 					continue;
@@ -98,14 +93,7 @@ public class Main {
 
 				int id = Integer.parseInt(comDiv[2]);
 
-				/* 입력된 id값과 배열 위치 비교 */
-				for (int i = 0; i < articles.size(); i++) {
-					Article article = articles.get(i);
-					if (article.id == id) {
-						foundArticle = articles.get(i);
-						break;
-					}
-				}
+				foundArticle = getArticleById(id);
 				if (foundArticle == null) {
 					System.out.println(id + "번 게시글이 존재하지 않습니다");
 					continue;
@@ -129,17 +117,9 @@ public class Main {
 				}
 
 				int id = Integer.parseInt(comDiv[2]);
-				int foundIndex = -1;
 
-				/* 입력된 id값과 배열 위치 비교 */
-				/* ArrayList 순회하며 일치하는 객체의 index와 같은 값을 foundIndex에 저장 */
-				for (int i = 0; i < articles.size(); i++) {
-					Article article = articles.get(i);
-					if (article.id == id) {
-						foundIndex = i;
-						break;
-					}
-				}
+				foundIndex = getArticleByIndex(id);
+				
 				if (foundIndex == -1) {
 					System.out.println(id + "번 게시글이 존재하지 않습니다");
 					continue;
@@ -160,24 +140,44 @@ public class Main {
 		}
 		sc.close();
 	}
+	/* 게시글 찾기 by index */
+	static int getArticleByIndex(int id) {
+		int i = 0;
+		for(Article article : articles) {
+			if(article.id == id) {
+				return i;
+			}
+			i++;
+		}
+		
+		return -1;
+	}
+	
+	/* 게시글 찾기 by id */
+	static Article getArticleById(int id) {
+		
+//		for (Article article : articles) {
+//			if (article.id == id) {
+//				return article;
+//			}
+//		}
+		
+		int index = getArticleByIndex(id);
+		
+		/* 게시글이 있을 때 */
+		if(index != -1) {
+			return articles.get(index);
+		}
+		/* 게시글이 없을 때 */
+		return null;
+	}
+
 	/* 테스트 데이터 생성 */
 	static void makeTestData() {
-		/* 방법 1
-		for(int i = 1; i <= 3; i++) {
-			int id = i;
-			String title = "제목 " + i;
-			String content  = "내용 " + i;
-			String regDate = Util.getNowDateTimeStr();
-			String updateDate = Util.getNowDateTimeStr();
-			Article article = new Article(id, title, content, regDate, updateDate);
-			articles.add(article);
-		 */
-		
-		/* 방법 2 */
 		articles.add(new Article(1, "제목 1", "내용 1", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
 		articles.add(new Article(2, "제목 2", "내용 2", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
 		articles.add(new Article(3, "제목 3", "내용 3", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
-		}
+	}
 }
 
 class Article {
@@ -187,8 +187,8 @@ class Article {
 	String regDate;
 	String updateDate;
 	int hit;
-	
-	Article(int id, String title, String content, String regDate, String updateDate){
+
+	Article(int id, String title, String content, String regDate, String updateDate) {
 		this(id, title, content, regDate, updateDate, 0);
 	}
 
