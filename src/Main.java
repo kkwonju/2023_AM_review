@@ -4,9 +4,11 @@ import java.util.Scanner;
 
 public class Main {
 	static List<Article> articles = new ArrayList<>();
+	static List<Member> members = new ArrayList<>();
 
 	public static void main(String[] args) {
 
+		/* 테스트 데이터 생성 */
 		makeTestData();
 
 		/* 프로그램 시작 */
@@ -119,7 +121,7 @@ public class Main {
 				int id = Integer.parseInt(comDiv[2]);
 
 				foundIndex = getArticleByIndex(id);
-				
+
 				if (foundIndex == -1) {
 					System.out.println(id + "번 게시글이 존재하지 않습니다");
 					continue;
@@ -132,6 +134,32 @@ public class Main {
 				System.out.println("== 프로그램 종료 ==");
 				break;
 
+				/* 회원가입 */
+			} else if (command.equals("member join")) {
+				System.out.println("회원가입");
+
+				System.out.print("아이디 : ");
+				String loginId = sc.nextLine();
+				System.out.print("비밀번호 : ");
+				String loginPw = sc.nextLine();
+				System.out.print("비밀번호 확인 : ");
+				String loginPwConfirm = sc.nextLine();
+
+				System.out.print("이름 : ");
+				String userName = sc.nextLine();
+
+				String userRegDate = Util.getNowDateTimeStr();
+				members.add(new Member(loginId, loginPw, userName, userRegDate));
+
+				/* 회원 정보 출력 */
+			} else if(command.equals("member")){
+				for(Member member : members) {
+					System.out.println(member.loginId);					
+					System.out.println(member.loginPw);					
+					System.out.println(member.userName);
+					System.out.println(member.userRegDate);
+				}
+				
 				/* 명령어 잘못 입력 */
 			} else {
 				System.out.println("일치하는 명령어가 없습니다");
@@ -140,32 +168,33 @@ public class Main {
 		}
 		sc.close();
 	}
+
 	/* 게시글 찾기 by index */
 	static int getArticleByIndex(int id) {
 		int i = 0;
-		for(Article article : articles) {
-			if(article.id == id) {
+		for (Article article : articles) {
+			if (article.id == id) {
 				return i;
 			}
 			i++;
 		}
-		
+
 		return -1;
 	}
-	
+
 	/* 게시글 찾기 by id */
 	static Article getArticleById(int id) {
-		
+
 //		for (Article article : articles) {
 //			if (article.id == id) {
 //				return article;
 //			}
 //		}
-		
+
 		int index = getArticleByIndex(id);
-		
+
 		/* 게시글이 있을 때 */
-		if(index != -1) {
+		if (index != -1) {
 			return articles.get(index);
 		}
 		/* 게시글이 없을 때 */
@@ -177,6 +206,20 @@ public class Main {
 		articles.add(new Article(1, "제목 1", "내용 1", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
 		articles.add(new Article(2, "제목 2", "내용 2", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
 		articles.add(new Article(3, "제목 3", "내용 3", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
+	}
+}
+
+class Member {
+	String loginId;
+	String loginPw;
+	String userName;
+	String userRegDate;
+
+	Member(String loginId, String loginPw, String userName, String userRegDate) {
+		this.loginId = loginId;
+		this.loginPw = loginPw;
+		this.userName = userName;
+		this.userRegDate = userRegDate;
 	}
 }
 
