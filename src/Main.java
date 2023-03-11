@@ -17,6 +17,7 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 
 		int lastArticleId = 3;
+		int lastMemberId = 0;
 
 		while (true) {
 			System.out.print("명령어 > ");
@@ -25,8 +26,43 @@ public class Main {
 			Article foundArticle = null;
 			int foundIndex = -1;
 
-			/* 게시글 목록 */
-			if (command.equals("article list")) {
+			/* 회원가입 */
+			if (command.equals("member join")) {
+				int id = lastMemberId + 1;
+				System.out.println("회원가입");
+				String loginId = null;
+				while (true) {
+					System.out.print("아이디 : ");
+					loginId = sc.nextLine();
+					if (isJoinableLoginId(loginId) != null) {
+						System.out.println("이미 사용중인 아이디입니다");
+						continue;
+					}
+					System.out.println("멋진 아이디네요!");
+					break;
+				}
+				System.out.print("비밀번호 : ");
+				String loginPw = sc.nextLine();
+				System.out.print("비밀번호 확인 : ");
+				String loginPwConfirm = sc.nextLine();
+
+				System.out.print("이름 : ");
+				String userName = sc.nextLine();
+
+				String userRegDate = Util.getNowDateTimeStr();
+				members.add(new Member(loginId, loginPw, userName, userRegDate));
+
+				/* 회원 정보 출력 */
+			} else if (command.equals("member")) {
+				for (Member member : members) {
+					System.out.println("로그인 아이디 : " + member.loginId);
+					System.out.println("로그인 비밀번호 " + member.loginPw);
+					System.out.println("유저 이름 : " + member.userName);
+					System.out.println("가입 일자 : " + member.userRegDate);
+				}
+
+				/* 게시글 목록 */
+			} else if (command.equals("article list")) {
 				if (articles.size() == 0) {
 					System.out.println("게시글이 없습니다");
 				} else {
@@ -84,18 +120,19 @@ public class Main {
 
 				/* 게시글 수정 */
 			} else if (command.startsWith("article modify")) {
-
+				
 				String[] comDiv = new String[3];
+				
 				comDiv = command.split(" ");
-
+				
 				if (comDiv.length < 3) {
 					System.out.println("명령어를 확인해주세요");
 					continue;
 				}
-
 				int id = Integer.parseInt(comDiv[2]);
-
+				
 				foundArticle = getArticleById(id);
+				
 				if (foundArticle == null) {
 					System.out.println(id + "번 게시글이 존재하지 않습니다");
 					continue;
@@ -105,7 +142,6 @@ public class Main {
 				System.out.print("내용 : ");
 				foundArticle.content = sc.nextLine();
 				foundArticle.updateDate = Util.getNowDateTimeStr();
-
 				System.out.println(foundArticle.id + "번 게시글이 수정되었습니다");
 
 				/* 게시글 삭제 */
@@ -134,32 +170,6 @@ public class Main {
 				System.out.println("== 프로그램 종료 ==");
 				break;
 
-				/* 회원가입 */
-			} else if (command.equals("member join")) {
-				System.out.println("회원가입");
-
-				System.out.print("아이디 : ");
-				String loginId = sc.nextLine();
-				System.out.print("비밀번호 : ");
-				String loginPw = sc.nextLine();
-				System.out.print("비밀번호 확인 : ");
-				String loginPwConfirm = sc.nextLine();
-
-				System.out.print("이름 : ");
-				String userName = sc.nextLine();
-
-				String userRegDate = Util.getNowDateTimeStr();
-				members.add(new Member(loginId, loginPw, userName, userRegDate));
-
-				/* 회원 정보 출력 */
-			} else if(command.equals("member")){
-				for(Member member : members) {
-					System.out.println(member.loginId);					
-					System.out.println(member.loginPw);					
-					System.out.println(member.userName);
-					System.out.println(member.userRegDate);
-				}
-				
 				/* 명령어 잘못 입력 */
 			} else {
 				System.out.println("일치하는 명령어가 없습니다");
@@ -167,10 +177,21 @@ public class Main {
 
 		}
 		sc.close();
+
+	}
+
+	/* 회원 찾기 by loginId */
+	private static Member isJoinableLoginId(String loginId) {
+		for (Member member : members) {
+			if (member.loginId.equals(loginId)) {
+				return member;
+			}
+		}
+		return null;
 	}
 
 	/* 게시글 찾기 by index */
-	static int getArticleByIndex(int id) {
+	private static int getArticleByIndex(int id) {
 		int i = 0;
 		for (Article article : articles) {
 			if (article.id == id) {
@@ -183,7 +204,7 @@ public class Main {
 	}
 
 	/* 게시글 찾기 by id */
-	static Article getArticleById(int id) {
+	private static Article getArticleById(int id) {
 
 //		for (Article article : articles) {
 //			if (article.id == id) {
@@ -202,7 +223,7 @@ public class Main {
 	}
 
 	/* 테스트 데이터 생성 */
-	static void makeTestData() {
+	private static void makeTestData() {
 		articles.add(new Article(1, "제목 1", "내용 1", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
 		articles.add(new Article(2, "제목 2", "내용 2", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
 		articles.add(new Article(3, "제목 3", "내용 3", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
