@@ -21,9 +21,8 @@ public class Main {
 
 		while (true) {
 			System.out.print("명령어 > ");
-			String command = sc.nextLine();
+			String command = sc.nextLine().trim();
 
-			Article foundArticle = null;
 			int foundIndex = -1;
 
 			/* 회원가입 */
@@ -61,17 +60,36 @@ public class Main {
 					System.out.println("가입 일자 : " + member.userRegDate);
 				}
 
-				/* 게시글 목록 */
-			} else if (command.equals("article list")) {
+				/* 게시글 목록 및 검색 */
+			} else if (command.startsWith("article list")) {
+				/* 게시글이 없을 때 */
 				if (articles.size() == 0) {
 					System.out.println("게시글이 없습니다");
-				} else {
-					System.out.println("번호 // 제목 // 조회");
-					for (int i = articles.size() - 1; i >= 0; i--) {
-						foundArticle = articles.get(i);
-						System.out.printf("  %d  //  %s  //  %d \n", foundArticle.id, foundArticle.title,
-								foundArticle.hit);
+					continue;
+				}
+
+				/* 게시글이 있을 때 */
+				String searchKeyword = command.substring("article list".length()).trim();
+				List<Article> forPrintArticles = articles;
+
+				if (searchKeyword.length() > 0) {
+					System.out.println("searchKeyword : " + searchKeyword);
+					forPrintArticles = new ArrayList<>();
+
+					for (Article article : articles) {
+						if (article.title.contains(searchKeyword)) {
+							forPrintArticles.add(article);
+						}
 					}
+					if (forPrintArticles.size() == 0) {
+						System.out.println("검색 결과가 없습니다");
+						continue;
+					}
+				}
+				System.out.println("번호 // 제목 // 조회");
+				for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
+					Article article = forPrintArticles.get(i);
+					System.out.printf("  %d  //  %s  //  %d \n", article.id, article.title, article.hit);
 				}
 
 				/* 게시글 작성 */
@@ -94,10 +112,8 @@ public class Main {
 			} else if (command.startsWith("article detail")) {
 
 				/* 명령어 끊어서 비교 */
-				String[] comDiv = new String[3];
-
-				comDiv = command.split(" ");
-
+				String[] comDiv = command.split(" "); // ** new 없이 바로
+				
 				if (comDiv.length < 3) {
 					System.out.println("명령어를 확인해주세요");
 					continue;
@@ -105,7 +121,8 @@ public class Main {
 
 				int id = Integer.parseInt(comDiv[2]);
 
-				foundArticle = getArticleById(id);
+				Article foundArticle = getArticleById(id);
+				
 				if (foundArticle == null) {
 					System.out.println(id + "번 게시글이 존재하지 않습니다");
 					continue;
@@ -120,34 +137,39 @@ public class Main {
 
 				/* 게시글 수정 */
 			} else if (command.startsWith("article modify")) {
-				
+
 				String[] comDiv = new String[3];
-				
+
 				comDiv = command.split(" ");
-				
+
 				if (comDiv.length < 3) {
 					System.out.println("명령어를 확인해주세요");
 					continue;
 				}
 				int id = Integer.parseInt(comDiv[2]);
-				
-				foundArticle = getArticleById(id);
-				
+
+				Article foundArticle = getArticleById(id);
+
 				if (foundArticle == null) {
 					System.out.println(id + "번 게시글이 존재하지 않습니다");
 					continue;
 				}
 				System.out.print("제목 : ");
-				foundArticle.title = sc.nextLine();
+				String newTitle = sc.nextLine();
 				System.out.print("내용 : ");
-				foundArticle.content = sc.nextLine();
-				foundArticle.updateDate = Util.getNowDateTimeStr();
-				System.out.println(foundArticle.id + "번 게시글이 수정되었습니다");
+				String newContent = sc.nextLine();
+				String updateDate = Util.getNowDateTimeStr();
+				
+				
+				foundArticle.title = newTitle;
+				foundArticle.content = newContent;
+				foundArticle.updateDate = updateDate;
+				
+				System.out.println(id + "번 게시글이 수정되었습니다"); // 사용자 입력 id값
 
 				/* 게시글 삭제 */
 			} else if (command.startsWith("article delete")) {
-				String[] comDiv = new String[3];
-				comDiv = command.split(" ");
+				String[] comDiv = command.split(" ");
 
 				if (comDiv.length < 3) {
 					System.out.println("명령어를 확인해주세요");
@@ -167,7 +189,6 @@ public class Main {
 
 				/* 프로그램 종료 */
 			} else if (command.equals("exit")) {
-				System.out.println("== 프로그램 종료 ==");
 				break;
 
 				/* 명령어 잘못 입력 */
@@ -176,6 +197,8 @@ public class Main {
 			}
 
 		}
+		System.out.println("== 프로그램 종료 ==");
+		
 		sc.close();
 
 	}
