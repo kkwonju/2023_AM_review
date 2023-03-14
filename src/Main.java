@@ -30,6 +30,7 @@ public class Main {
 				int id = lastMemberId + 1;
 				System.out.println("회원가입");
 				String loginId = null;
+				String loginPw = null;
 				while (true) {
 					System.out.print("아이디 : ");
 					loginId = sc.nextLine();
@@ -40,10 +41,17 @@ public class Main {
 					System.out.println("멋진 아이디네요!");
 					break;
 				}
+				while(true) {
 				System.out.print("비밀번호 : ");
-				String loginPw = sc.nextLine();
+				loginPw = sc.nextLine();
 				System.out.print("비밀번호 확인 : ");
 				String loginPwConfirm = sc.nextLine();
+				if (loginPw.equals(loginPwConfirm) == false) {
+					System.out.println("비밀번호가 일치하지 않습니다");
+					continue;
+					}
+				break;
+				}
 
 				System.out.print("이름 : ");
 				String userName = sc.nextLine();
