@@ -58,8 +58,11 @@
 
 12 loginPw 확인 기능
 
-TODO
-
 13 패키지 분리, 구조개선, Controller로 기능 이전
     + Main > App > Controller ( dto )
     + arrayList 컨트롤러로 이전
+    
+TODO
+
+14 MemberController 기능 보완
+    + 회원가입 시 공백 불허, 필수 정보 입력, id 부여

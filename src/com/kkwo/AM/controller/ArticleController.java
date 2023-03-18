@@ -11,7 +11,6 @@ public class ArticleController{
 	private List<Article> articles;
 	private Scanner sc;
 	int lastArticleId = 3;
-	int foundIndex = -1;
 
 	public ArticleController(Scanner sc) {
 		this.articles = new ArrayList<>();
@@ -112,7 +111,7 @@ public class ArticleController{
 			return;
 		}
 		int id = Integer.parseInt(comDiv[2]);
-		foundIndex = getArticleByIndex(id);
+		int foundIndex = getArticleByIndex(id);
 		if (foundIndex == -1) {
 			System.out.println(id + "번 게시글이 존재하지 않습니다");
 			return;

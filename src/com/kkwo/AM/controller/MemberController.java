@@ -7,12 +7,12 @@ import java.util.Scanner;
 import com.kkwo.AM.dto.Member;
 import com.kkwo.AM.util.Util;
 
-public class MemberController{
+public class MemberController {
 	private List<Member> members;
 	private Scanner sc;
-	int lastMemberId = 0;
+	int lastMemberId = 3;
 
-	public MemberController( Scanner sc) {
+	public MemberController(Scanner sc) {
 		this.members = new ArrayList<>();
 		this.sc = sc;
 	}
@@ -22,9 +22,14 @@ public class MemberController{
 		System.out.println("회원가입");
 		String loginId = null;
 		String loginPw = null;
+		String userName = null;
 		while (true) {
 			System.out.print("아이디 : ");
-			loginId = sc.nextLine();
+			loginId = sc.nextLine().trim();
+			if (loginId.length() == 0) {
+				System.out.println("필수 정보입니다");
+				continue;
+			}
 			if (isJoinableLoginId(loginId) != null) {
 				System.out.println("이미 사용중인 아이디입니다");
 				continue;
@@ -34,7 +39,11 @@ public class MemberController{
 		}
 		while (true) {
 			System.out.print("비밀번호 : ");
-			loginPw = sc.nextLine();
+			loginPw = sc.nextLine().trim();
+			if (loginPw.length() == 0) {
+				System.out.println("필수 정보입니다");
+				continue;
+			}
 			System.out.print("비밀번호 확인 : ");
 			String loginPwConfirm = sc.nextLine();
 			if (loginPw.equals(loginPwConfirm) == false) {
@@ -43,13 +52,22 @@ public class MemberController{
 			}
 			break;
 		}
-		System.out.print("이름 : ");
-		String userName = sc.nextLine();
+		while (true) {
+			System.out.print("이름 : ");
+			userName = sc.nextLine().trim();
+			if(userName.length() == 0) {
+				System.out.println("필수 정보입니다");
+				continue;
+			}
+			break;
+		}
 		String regDate = Util.getNowDateTimeStr();
 		members.add(new Member(id, regDate, regDate, loginId, loginPw, userName));
+		System.out.println(id + "번 회원이 가입되었습니다");
+		lastMemberId++;
 	}
 
-	private void showProfile() {
+	public void showProfile() {
 		for (Member member : members) {
 			System.out.println("로그인 아이디 : " + member.loginId);
 			System.out.println("로그인 비밀번호 " + member.loginPw);
@@ -66,11 +84,11 @@ public class MemberController{
 		}
 		return null;
 	}
-	
+
 	public void makeTestData() {
 		System.out.println("Member 테스트 데이터가 생성되었습니다");
 		members.add(new Member(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test1", "0000", "kkwo1"));
-		members.add(new Member(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test2", "0000", "kkwo2" ));
-		members.add(new Member(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test3", "0000", "kkwo3" ));
+		members.add(new Member(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test2", "0000", "kkwo2"));
+		members.add(new Member(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test3", "0000", "kkwo3"));
 	}
 }
