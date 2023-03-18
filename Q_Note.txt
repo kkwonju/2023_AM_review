@@ -61,8 +61,11 @@
 13 패키지 분리, 구조개선, Controller로 기능 이전
     + Main > App > Controller ( dto )
     + arrayList 컨트롤러로 이전
-    
-TODO
 
 14 MemberController 기능 보완
     + 회원가입 시 공백 불허, 필수 정보 입력, id 부여
+    
+TODO
+
+15 로그인 , 로그아웃 기능 구현
+    + 로그인 로그아웃 상태

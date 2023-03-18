@@ -10,7 +10,10 @@ import com.kkwo.AM.util.Util;
 public class MemberController {
 	private List<Member> members;
 	private Scanner sc;
+	
 	int lastMemberId = 3;
+	
+	Member loginedMember = null;
 
 	public MemberController(Scanner sc) {
 		this.members = new ArrayList<>();
@@ -55,7 +58,7 @@ public class MemberController {
 		while (true) {
 			System.out.print("이름 : ");
 			userName = sc.nextLine().trim();
-			if(userName.length() == 0) {
+			if (userName.length() == 0) {
 				System.out.println("필수 정보입니다");
 				continue;
 			}
@@ -65,6 +68,57 @@ public class MemberController {
 		members.add(new Member(id, regDate, regDate, loginId, loginPw, userName));
 		System.out.println(id + "번 회원이 가입되었습니다");
 		lastMemberId++;
+	}
+
+	public void doLogin() {
+		if(loginedMember != null) {
+			System.out.println("로그아웃 후 이용해주세요");
+			return;
+		}
+		Member foundRegisteredMember = null;
+		while(true) {
+			System.out.print("아이디 : ");
+			String loginId = sc.nextLine();
+			if(loginId.length() == 0) {
+				System.out.println("아이디를 입력해주세요");
+				continue;
+			}
+			for(Member member : members) {
+				if(member.loginId.equals(loginId)) {
+					foundRegisteredMember = member;
+					break;
+				}
+			}
+			if(foundRegisteredMember == null) {
+				System.out.println("일치하는 회원이 없습니다");
+				continue;
+			}
+			break;
+		}
+		while(true) {
+			System.out.print("비밀번호 : ");
+			String loginPw = sc.nextLine();
+			if(loginPw.length() == 0) {
+				System.out.println("비밀번호를 입력해주세요");
+				continue;
+			}
+			if(foundRegisteredMember.loginPw.equals(loginPw) == false) {
+				System.out.println("비밀번호가 틀렸습니다");
+				continue;
+			}
+			break;
+		}
+		loginedMember = foundRegisteredMember;
+		System.out.println(foundRegisteredMember.loginId + "님 반갑습니다");
+	}
+
+	public void doLogout() {
+		if(loginedMember == null) {
+			System.out.println("로그아웃 상태입니다");
+			return;
+		}
+		System.out.println("로그아웃되었습니다");
+		loginedMember = null;
 	}
 
 	public void showProfile() {
@@ -91,4 +145,5 @@ public class MemberController {
 		members.add(new Member(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test2", "0000", "kkwo2"));
 		members.add(new Member(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test3", "0000", "kkwo3"));
 	}
+
 }
