@@ -65,7 +65,14 @@
 14 MemberController 기능 보완
     + 회원가입 시 공백 불허, 필수 정보 입력, id 부여
     
-TODO
-
 15 로그인 , 로그아웃 기능 구현
     + 로그인 로그아웃 상태
+    
+TODO
+
+16 상태에 따른 명령어 제한
+    + 클래스 변수와 인스턴스 변수 ( static )
+    + 로그인 상태 확인 메서드
+    + 중복 기능 부모로 이전 후 상속
+    + write , modify , delete , logout , profile (로그인)
+    + join , login (로그아웃)

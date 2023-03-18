@@ -7,7 +7,7 @@ import java.util.Scanner;
 import com.kkwo.AM.dto.Article;
 import com.kkwo.AM.util.Util;
 
-public class ArticleController{
+public class ArticleController extends Controller{
 	private List<Article> articles;
 	private Scanner sc;
 	int lastArticleId = 3;
@@ -18,6 +18,10 @@ public class ArticleController{
 	}
 
 	public void doWrite() {
+		if(isLogined() == false) {
+			System.out.println("로그인 후 사용해주세요");
+			return;
+		}
 		int id = lastArticleId + 1;
 		System.out.print("제목 : ");
 		String title = sc.nextLine();
@@ -81,6 +85,10 @@ public class ArticleController{
 	}
 
 	public void doModify(String command) {
+		if(isLogined() == false) {
+			System.out.println("로그인 후 사용해주세요");
+			return;
+		}
 		String[] comDiv = new String[3];
 		comDiv = command.split(" ");
 		if (comDiv.length < 3) {
@@ -105,6 +113,10 @@ public class ArticleController{
 	}
 
 	public void doDelete(String command) {
+		if(isLogined() == false) {
+			System.out.println("로그인 후 사용해주세요");
+			return;
+		}
 		String[] comDiv = command.split(" ");
 		if (comDiv.length < 3) {
 			System.out.println("명령어를 확인해주세요");

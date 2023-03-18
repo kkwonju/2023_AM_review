@@ -7,13 +7,11 @@ import java.util.Scanner;
 import com.kkwo.AM.dto.Member;
 import com.kkwo.AM.util.Util;
 
-public class MemberController {
+public class MemberController extends Controller {
 	private List<Member> members;
 	private Scanner sc;
-	
+
 	int lastMemberId = 3;
-	
-	Member loginedMember = null;
 
 	public MemberController(Scanner sc) {
 		this.members = new ArrayList<>();
@@ -21,6 +19,10 @@ public class MemberController {
 	}
 
 	public void doJoin() {
+		if (isLogined()) {
+			System.out.println("로그아웃 후 이용해주세요");
+			return;
+		}
 		int id = lastMemberId + 1;
 		System.out.println("회원가입");
 		String loginId = null;
@@ -71,38 +73,38 @@ public class MemberController {
 	}
 
 	public void doLogin() {
-		if(loginedMember != null) {
+		if (isLogined()) {
 			System.out.println("로그아웃 후 이용해주세요");
 			return;
 		}
 		Member foundRegisteredMember = null;
-		while(true) {
+		while (true) {
 			System.out.print("아이디 : ");
 			String loginId = sc.nextLine();
-			if(loginId.length() == 0) {
+			if (loginId.length() == 0) {
 				System.out.println("아이디를 입력해주세요");
 				continue;
 			}
-			for(Member member : members) {
-				if(member.loginId.equals(loginId)) {
+			for (Member member : members) {
+				if (member.loginId.equals(loginId)) {
 					foundRegisteredMember = member;
 					break;
 				}
 			}
-			if(foundRegisteredMember == null) {
+			if (foundRegisteredMember == null) {
 				System.out.println("일치하는 회원이 없습니다");
 				continue;
 			}
 			break;
 		}
-		while(true) {
+		while (true) {
 			System.out.print("비밀번호 : ");
 			String loginPw = sc.nextLine();
-			if(loginPw.length() == 0) {
+			if (loginPw.length() == 0) {
 				System.out.println("비밀번호를 입력해주세요");
 				continue;
 			}
-			if(foundRegisteredMember.loginPw.equals(loginPw) == false) {
+			if (foundRegisteredMember.loginPw.equals(loginPw) == false) {
 				System.out.println("비밀번호가 틀렸습니다");
 				continue;
 			}
@@ -113,7 +115,7 @@ public class MemberController {
 	}
 
 	public void doLogout() {
-		if(loginedMember == null) {
+		if (isLogined() == false) {
 			System.out.println("로그아웃 상태입니다");
 			return;
 		}

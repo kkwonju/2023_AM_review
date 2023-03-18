@@ -1,20 +1,11 @@
 package com.kkwo.AM;
 
-import java.util.List;
 import java.util.Scanner;
 
 import com.kkwo.AM.controller.ArticleController;
 import com.kkwo.AM.controller.MemberController;
-import com.kkwo.AM.dto.Article;
-import com.kkwo.AM.dto.Member;
 
 public class App {
-	List<Article> articles;
-	List<Member> members;
-
-	public App() {
-	}
-
 	public void start() {
 		System.out.println("== 프로젝트 시작 ==");
 		
