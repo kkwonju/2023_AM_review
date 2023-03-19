@@ -72,6 +72,10 @@
     + write , modify , delete , logout , profile (로그인)
     + join , login (로그아웃)
     
+17. member profile 기능 추가
+
 TODO
 
-17. member profile 기능 추가
+18. 로그인 로그아웃 체크를 App 클래스에 추가
+    + 명령어 미입력 시 재입력 요청
+    + article delete 수정

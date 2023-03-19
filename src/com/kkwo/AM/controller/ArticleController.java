@@ -16,12 +16,32 @@ public class ArticleController extends Controller{
 		this.articles = new ArrayList<>();
 		this.sc = sc;
 	}
-
-	public void doWrite() {
-		if(isLogined() == false) {
-			System.out.println("로그인 후 사용해주세요");
-			return;
+	
+	@Override
+	public void doAction(String actionMethodName, String command) {
+		switch (actionMethodName) {
+		case "write":
+			doWrite();
+			break;
+		case "list":
+			showList(command);
+			break;
+		case "detail":
+			showDetail(command);
+			break;
+		case "modify":
+			doModify(command);
+			break;
+		case "delete":
+			doDelete(command);
+			break;
+		default:
+			System.out.println("해당 기능은 존재하지 않습니다");
+			break;
 		}
+	}
+	
+	public void doWrite() {
 		int id = lastArticleId + 1;
 		System.out.print("제목 : ");
 		String title = sc.nextLine();
@@ -64,12 +84,16 @@ public class ArticleController extends Controller{
 	}
 
 	public void showDetail(String command) {
-		String[] comDiv = command.split(" ");
-		if (comDiv.length < 3) {
+		String[] commandDiv = command.split(" ");
+		if (commandDiv.length < 3) {
 			System.out.println("명령어를 확인해주세요");
 			return;
 		}
-		int id = Integer.parseInt(comDiv[2]);
+		if(isConvertibleToInt(commandDiv[2]) == false) {
+			System.out.println("3번째에 게시물 번호를 입력해주세요");
+			return;
+		}
+		int id = Integer.parseInt(commandDiv[2]);
 		Article foundArticle = getArticleById(id);
 		if (foundArticle == null) {
 			System.out.println(id + "번 게시글이 존재하지 않습니다");
@@ -85,17 +109,17 @@ public class ArticleController extends Controller{
 	}
 
 	public void doModify(String command) {
-		if(isLogined() == false) {
-			System.out.println("로그인 후 사용해주세요");
-			return;
-		}
-		String[] comDiv = new String[3];
-		comDiv = command.split(" ");
-		if (comDiv.length < 3) {
+		String[] commandDiv = new String[3];
+		commandDiv = command.split(" ");
+		if (commandDiv.length < 3) {
 			System.out.println("명령어를 확인해주세요");
 			return;
 		}
-		int id = Integer.parseInt(comDiv[2]);
+		if(isConvertibleToInt(commandDiv[2]) == false) {
+			System.out.println("3번째에 게시물 번호를 입력해주세요");
+			return;
+		}
+		int id = Integer.parseInt(commandDiv[2]);
 		Article foundArticle = getArticleById(id);
 		if (foundArticle == null) {
 			System.out.println(id + "번 게시글이 존재하지 않습니다");
@@ -113,22 +137,22 @@ public class ArticleController extends Controller{
 	}
 
 	public void doDelete(String command) {
-		if(isLogined() == false) {
-			System.out.println("로그인 후 사용해주세요");
-			return;
-		}
-		String[] comDiv = command.split(" ");
-		if (comDiv.length < 3) {
+		String[] commandDiv = command.split(" ");
+		if (commandDiv.length < 3) {
 			System.out.println("명령어를 확인해주세요");
 			return;
 		}
-		int id = Integer.parseInt(comDiv[2]);
-		int foundIndex = getArticleByIndex(id);
-		if (foundIndex == -1) {
+		if(isConvertibleToInt(commandDiv[2]) == false) {
+			System.out.println("3번째에 게시물 번호를 입력해주세요");
+			return;
+		}
+		int id = Integer.parseInt(commandDiv[2]);
+		Article foundArticle = getArticleById(id);
+		if (foundArticle == null) {
 			System.out.println(id + "번 게시글이 존재하지 않습니다");
 			return;
 		}
-		articles.remove(foundIndex);
+		articles.remove(foundArticle);
 		System.out.println(id + "번 게시글이 삭제되었습니다");
 	}
 
@@ -150,6 +174,15 @@ public class ArticleController extends Controller{
 			return articles.get(index);
 		}
 		return null;
+	}
+	
+	private boolean isConvertibleToInt(String str) {
+		try {
+			Integer.parseInt(str);
+			return true;
+		} catch (NumberFormatException e){
+			return false;
+		}
 	}
 
 	public void makeTestData() {

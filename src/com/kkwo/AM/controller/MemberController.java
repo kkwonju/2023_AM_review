@@ -17,12 +17,29 @@ public class MemberController extends Controller {
 		this.members = new ArrayList<>();
 		this.sc = sc;
 	}
+	
+	@Override
+	public void doAction(String actionMethodName, String command) {
+		switch (actionMethodName) {
+		case "join":
+			doJoin();
+			break;
+		case "login":
+			doLogin();
+			break;
+		case "logout":
+			doLogout();
+			break;
+		case "profile":
+			showProfile();;
+			break;
+		default:
+			System.out.println("해당 기능은 존재하지 않습니다");
+			break;
+		}
+	}
 
 	public void doJoin() {
-		if (isLogined()) {
-			System.out.println("로그아웃 후 이용해주세요");
-			return;
-		}
 		int id = lastMemberId + 1;
 		System.out.println("회원가입");
 		String loginId = null;
@@ -73,10 +90,6 @@ public class MemberController extends Controller {
 	}
 
 	public void doLogin() {
-		if (isLogined()) {
-			System.out.println("로그아웃 후 이용해주세요");
-			return;
-		}
 		Member foundRegisteredMember = null;
 		while (true) {
 			System.out.print("아이디 : ");
@@ -115,19 +128,11 @@ public class MemberController extends Controller {
 	}
 
 	public void doLogout() {
-		if (isLogined() == false) {
-			System.out.println("로그아웃 상태입니다");
-			return;
-		}
-		System.out.println("로그아웃되었습니다");
 		loginedMember = null;
+		System.out.println("로그아웃되었습니다");
 	}
 
 	public void showProfile() {
-		if(isLogined() == false) {			
-			System.out.println("로그인 후 이용해주세요");
-			return;
-		}
 		System.out.println("로그인 아이디 : " + loginedMember.loginId);
 		System.out.println("로그인 비밀번호 " + loginedMember.loginPw);
 		System.out.println("유저 이름 : " + loginedMember.userName);

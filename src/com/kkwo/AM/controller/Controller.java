@@ -14,4 +14,6 @@ public abstract class Controller {
 	}
 	
 	abstract void makeTestData();
+
+	public abstract void doAction(String actionMethodName, String command);
 }

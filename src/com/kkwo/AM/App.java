@@ -3,9 +3,13 @@ package com.kkwo.AM;
 import java.util.Scanner;
 
 import com.kkwo.AM.controller.ArticleController;
+import com.kkwo.AM.controller.Controller;
 import com.kkwo.AM.controller.MemberController;
 
 public class App {
+	String controllerName;
+	String actionMethodName;
+
 	public void start() {
 		System.out.println("== 프로젝트 시작 ==");
 
@@ -14,6 +18,8 @@ public class App {
 		ArticleController articleController = new ArticleController(sc);
 		MemberController memberController = new MemberController(sc);
 
+		Controller controller;
+
 		articleController.makeTestData();
 		memberController.makeTestData();
 
@@ -21,38 +27,58 @@ public class App {
 			System.out.print("명령어 > ");
 			String command = sc.nextLine().trim();
 
-			if (command.equals("member join")) {
-				memberController.doJoin();
-
-			} else if (command.equals("member login")) {
-				memberController.doLogin();
-
-			} else if (command.equals("member logout")) {
-				memberController.doLogout();
-
-			} else if (command.equals("member profile")) {
-				memberController.showProfile();
-
-			} else if (command.startsWith("article list")) {
-				articleController.showList(command);
-
-			} else if (command.equals("article write")) {
-				articleController.doWrite();
-
-			} else if (command.startsWith("article detail")) {
-				articleController.showDetail(command);
-
-			} else if (command.startsWith("article modify")) {
-				articleController.doModify(command);
-
-			} else if (command.startsWith("article delete")) {
-				articleController.doDelete(command);
-
-			} else if (command.equals("exit")) {
-				break;
-			} else {
-				System.out.println("일치하는 명령어가 없습니다");
+			if (command.length() == 0) {
+				System.out.println("명령어를 입력해주세요");
+				continue;
 			}
+			if (command.equals("exit")) {
+				break;
+			}
+
+			String[] commandDiv = command.split(" ");
+			controllerName = commandDiv[0];
+			if(commandDiv.length < 2) {
+				System.out.println("명령어를 확인해주세요");
+				continue;
+			}
+			// actionMethodName에 commandDiv 배열의 1번째 요소를 넣어야하지만
+			// 입력된 값에는 1번째 요소가 없다
+			// 일단 입력값을 2개 받아보자
+			actionMethodName = commandDiv[1];
+			controller = null;
+			if (controllerName.equals("article")) {
+				controller = articleController;
+			} else if (controllerName.equals("member")) {
+				controller = memberController;
+			} else {
+				System.out.println("명령어를 확인해주세요");
+				continue;
+			}
+
+			String forLoginCheck = controllerName + "/" + actionMethodName;
+			switch (forLoginCheck) {
+			case "article/write":
+			case "article/modify":
+			case "article/delete":
+			case "member/profile":
+			case "member/logout":
+				if (controller.isLogined() == false) {
+					System.out.println("로그인 후 이용해주세요");
+					continue;
+				}
+				break;
+			}
+			switch (forLoginCheck) {
+			case "member/join":
+			case "member/login":
+				if(controller.isLogined()) {
+					System.out.println("로그아웃 후 이용해주세요");
+					continue;
+				}
+				break;
+			}
+			
+			controller.doAction(actionMethodName, command);
 		}
 		System.out.println("== 프로그램 종료 ==");
 		sc.close();
