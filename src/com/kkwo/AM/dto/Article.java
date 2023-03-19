@@ -6,12 +6,12 @@ public class Article extends dto{
 	public String title;
 	public String content;
 
-	public Article(int id, int memberId, String title, String content, String regDate, String updateDate) {
-		this(id, 0, memberId, title, content, regDate, updateDate);
+	public Article(int articleId, int memberId, String title, String content, String regDate, String updateDate) {
+		this(articleId, 0, memberId, title, content, regDate, updateDate);
 	}
 
-	public Article(int id, int hit, int memberId, String title, String content, String regDate, String updateDate) {
-		this.id = id;
+	public Article(int articleId, int hit, int memberId, String title, String content, String regDate, String updateDate) {
+		this.id = articleId;
 		this.hit = hit;
 		this.memberId = memberId;
 		this.title = title;

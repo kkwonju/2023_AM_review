@@ -89,7 +89,11 @@
     독립적인 공간 생성
     + 데이터베이스와의 상호작용을 담당하는 객체
 
-TODO
-
 21. 각 controller에 App에서 입력받은 값 저장
     + controller에서 편하게 사용하기 위해
+
+TODO
+
+22. 작성자만 수정 , 삭제 권한 부여
+    + 게시물의 작성자 id와 member의 id를 비교해보자
+    + 각 controller 안 변수명 보완

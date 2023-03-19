@@ -10,6 +10,8 @@ import com.kkwo.AM.util.Util;
 public class MemberController extends Controller {
 	public static List<Member> members;
 	private Scanner sc;
+	private String actionMethodName;
+	private String command;
 
 	int lastMemberId = 3;
 
@@ -20,6 +22,9 @@ public class MemberController extends Controller {
 	
 	@Override
 	public void doAction(String actionMethodName, String command) {
+		this.actionMethodName = actionMethodName;
+		this.command = command;
+		
 		switch (actionMethodName) {
 		case "join":
 			doJoin();
@@ -40,43 +45,54 @@ public class MemberController extends Controller {
 	}
 
 	public void doJoin() {
-		int id = lastMemberId + 1;
-		System.out.println("회원가입");
+		int memberId = lastMemberId + 1;
 		String loginId = null;
 		String loginPw = null;
 		String userName = null;
+		
+		System.out.println("회원가입");
+		
 		while (true) {
 			System.out.print("아이디 : ");
 			loginId = sc.nextLine().trim();
+			
 			if (loginId.length() == 0) {
 				System.out.println("필수 정보입니다");
 				continue;
 			}
+			
 			if (isJoinableLoginId(loginId) != null) {
 				System.out.println("이미 사용중인 아이디입니다");
 				continue;
 			}
+			
 			System.out.println("멋진 아이디네요!");
 			break;
 		}
+		
 		while (true) {
 			System.out.print("비밀번호 : ");
 			loginPw = sc.nextLine().trim();
+			
 			if (loginPw.length() == 0) {
 				System.out.println("필수 정보입니다");
 				continue;
 			}
+			
 			System.out.print("비밀번호 확인 : ");
 			String loginPwConfirm = sc.nextLine();
+			
 			if (loginPw.equals(loginPwConfirm) == false) {
 				System.out.println("비밀번호가 일치하지 않습니다");
 				continue;
 			}
 			break;
 		}
+		
 		while (true) {
 			System.out.print("이름 : ");
 			userName = sc.nextLine().trim();
+			
 			if (userName.length() == 0) {
 				System.out.println("필수 정보입니다");
 				continue;
@@ -84,39 +100,47 @@ public class MemberController extends Controller {
 			break;
 		}
 		String regDate = Util.getNowDateTimeStr();
-		members.add(new Member(id, regDate, regDate, loginId, loginPw, userName));
-		System.out.println(id + "번 회원이 가입되었습니다");
+		
+		members.add(new Member(memberId, regDate, regDate, loginId, loginPw, userName));
+		System.out.println(memberId + "번 회원이 가입되었습니다");
 		lastMemberId++;
 	}
 
 	public void doLogin() {
 		Member foundRegisteredMember = null;
+		
 		while (true) {
 			System.out.print("아이디 : ");
 			String loginId = sc.nextLine();
+			
 			if (loginId.length() == 0) {
 				System.out.println("아이디를 입력해주세요");
 				continue;
 			}
+			
 			for (Member member : members) {
 				if (member.loginId.equals(loginId)) {
 					foundRegisteredMember = member;
 					break;
 				}
 			}
+			
 			if (foundRegisteredMember == null) {
 				System.out.println("일치하는 회원이 없습니다");
 				continue;
 			}
 			break;
 		}
+		
 		while (true) {
 			System.out.print("비밀번호 : ");
 			String loginPw = sc.nextLine();
+			
 			if (loginPw.length() == 0) {
 				System.out.println("비밀번호를 입력해주세요");
 				continue;
 			}
+			
 			if (foundRegisteredMember.loginPw.equals(loginPw) == false) {
 				System.out.println("비밀번호가 틀렸습니다");
 				continue;
