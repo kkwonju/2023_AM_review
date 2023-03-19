@@ -45,7 +45,7 @@ public class MemberController extends Controller {
 	}
 
 	public void doJoin() {
-		int memberId = lastMemberId + 1;
+		int memberId = Container.memberDao.setNewId();
 		String loginId = null;
 		String loginPw = null;
 		String userName = null;
@@ -103,7 +103,6 @@ public class MemberController extends Controller {
 		
 		members.add(new Member(memberId, regDate, regDate, loginId, loginPw, userName));
 		System.out.println(memberId + "번 회원이 가입되었습니다");
-		lastMemberId++;
 	}
 
 	public void doLogin() {
@@ -174,9 +173,9 @@ public class MemberController extends Controller {
 
 	public void makeTestData() {
 		System.out.println("Member 테스트 데이터가 생성되었습니다");
-		members.add(new Member(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test1", "0000", "kkwo1"));
-		members.add(new Member(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test2", "0000", "kkwo2"));
-		members.add(new Member(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test3", "0000", "kkwo3"));
+		Container.memberDao.add(new Member(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test1", "0000", "kkwo1"));
+		Container.memberDao.add(new Member(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test2", "0000", "kkwo2"));
+		Container.memberDao.add(new Member(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test3", "0000", "kkwo3"));
 	}
 
 }

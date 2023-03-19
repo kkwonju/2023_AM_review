@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.kkwo.AM.container.Container;
+import com.kkwo.AM.dao.ArticleDao;
 import com.kkwo.AM.dto.Article;
 import com.kkwo.AM.dto.Member;
 import com.kkwo.AM.util.Util;
@@ -14,8 +15,6 @@ public class ArticleController extends Controller {
 	private Scanner sc;
 	private String actionMethodName;
 	private String command;
-
-	int lastArticleId = 3;
 
 	public ArticleController(Scanner sc) {
 		this.articles = Container.articleDao.articles;
@@ -50,7 +49,7 @@ public class ArticleController extends Controller {
 	}
 
 	public void doWrite() {
-		int articleId = lastArticleId + 1;
+		int articleId = Container.articleDao.setNewId();
 		int memberId = loginedMember.id;
 		
 		System.out.print("제목 : ");
@@ -62,10 +61,9 @@ public class ArticleController extends Controller {
 		String regDate = Util.getNowDateTimeStr();
 		
 		Article article = new Article(articleId, memberId, title, content, regDate, regDate);
-		articles.add(article);
+		Container.articleDao.add(article);
 		
 		System.out.println(articleId + "번 게시글이 생성되었습니다");
-		lastArticleId++;
 	}
 
 	public void showList() {
@@ -255,8 +253,8 @@ public class ArticleController extends Controller {
 
 	public void makeTestData() {
 		System.out.println("Article 테스트 데이터가 생성되었습니다");
-		articles.add(new Article(1, 10, 3, "제목 1", "내용 1", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
-		articles.add(new Article(2, 20, 2, "제목 2", "내용 2", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
-		articles.add(new Article(3, 30, 2, "제목 3", "내용 3", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
+		Container.articleDao.add(new Article(1, 10, 3, "제목 1", "내용 1", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
+		Container.articleDao.add(new Article(2, 20, 2, "제목 2", "내용 2", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
+		Container.articleDao.add(new Article(3, 30, 2, "제목 3", "내용 3", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
 	}
 }
