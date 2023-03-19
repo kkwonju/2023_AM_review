@@ -41,9 +41,6 @@ public class App {
 				System.out.println("명령어를 확인해주세요");
 				continue;
 			}
-			// actionMethodName에 commandDiv 배열의 1번째 요소를 넣어야하지만
-			// 입력된 값에는 1번째 요소가 없다
-			// 일단 입력값을 2개 받아보자
 			actionMethodName = commandDiv[1];
 			controller = null;
 			if (controllerName.equals("article")) {

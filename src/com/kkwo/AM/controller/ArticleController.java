@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.kkwo.AM.dto.Article;
+import com.kkwo.AM.dto.Member;
 import com.kkwo.AM.util.Util;
 
-public class ArticleController extends Controller{
+public class ArticleController extends Controller {
 	private List<Article> articles;
 	private Scanner sc;
 	int lastArticleId = 3;
@@ -16,7 +17,7 @@ public class ArticleController extends Controller{
 		this.articles = new ArrayList<>();
 		this.sc = sc;
 	}
-	
+
 	@Override
 	public void doAction(String actionMethodName, String command) {
 		switch (actionMethodName) {
@@ -40,15 +41,16 @@ public class ArticleController extends Controller{
 			break;
 		}
 	}
-	
+
 	public void doWrite() {
 		int id = lastArticleId + 1;
+		int memberId = loginedMember.id;
 		System.out.print("제목 : ");
 		String title = sc.nextLine();
 		System.out.print("내용 : ");
 		String content = sc.nextLine();
 		String regDate = Util.getNowDateTimeStr();
-		Article article = new Article(id, title, content, regDate, regDate);
+		Article article = new Article(id, memberId, title, content, regDate, regDate);
 		articles.add(article);
 		System.out.println(id + "번 게시글이 생성되었습니다");
 		lastArticleId++;
@@ -76,10 +78,22 @@ public class ArticleController extends Controller{
 				return;
 			}
 		}
-		System.out.println("번호 // 제목 // 조회");
+		
+		System.out.println("번호 // 제목 // 조회 // 작성자");
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
+			
+			String writerName = null;			
 			Article article = forPrintArticles.get(i);
-			System.out.printf("  %d  //  %s  //  %d \n", article.id, article.title, article.hit);
+			
+			List<Member> members = MemberController.members;
+			
+			for(Member member : members) {
+				if(member.id == article.memberId) {
+					writerName = member.userName;
+					break;
+				}
+			}
+			System.out.printf("  %d  //  %s  //  %d  //  %s  \n", article.id, article.title, article.hit, writerName);
 		}
 	}
 
@@ -89,18 +103,30 @@ public class ArticleController extends Controller{
 			System.out.println("명령어를 확인해주세요");
 			return;
 		}
-		if(isConvertibleToInt(commandDiv[2]) == false) {
+		if (isConvertibleToInt(commandDiv[2]) == false) {
 			System.out.println("3번째에 게시물 번호를 입력해주세요");
 			return;
 		}
+		
 		int id = Integer.parseInt(commandDiv[2]);
 		Article foundArticle = getArticleById(id);
+		
 		if (foundArticle == null) {
 			System.out.println(id + "번 게시글이 존재하지 않습니다");
 			return;
 		}
+		
+		String writerName = null;
+		List<Member> members = MemberController.members;
+		
+		for(Member member : members) {
+			if(member.id == foundArticle.memberId) {
+				writerName = member.userName;
+			}
+		}
 		System.out.println("번호 : " + foundArticle.id);
 		System.out.println("조회 수 : " + foundArticle.hit);
+		System.out.println("작성자 : " + writerName);		
 		System.out.println("제목 : " + foundArticle.title);
 		System.out.println("내용 : " + foundArticle.content);
 		System.out.println("작성 시각 : " + foundArticle.regDate);
@@ -115,12 +141,14 @@ public class ArticleController extends Controller{
 			System.out.println("명령어를 확인해주세요");
 			return;
 		}
-		if(isConvertibleToInt(commandDiv[2]) == false) {
+		if (isConvertibleToInt(commandDiv[2]) == false) {
 			System.out.println("3번째에 게시물 번호를 입력해주세요");
 			return;
 		}
+		
 		int id = Integer.parseInt(commandDiv[2]);
 		Article foundArticle = getArticleById(id);
+		
 		if (foundArticle == null) {
 			System.out.println(id + "번 게시글이 존재하지 않습니다");
 			return;
@@ -142,7 +170,7 @@ public class ArticleController extends Controller{
 			System.out.println("명령어를 확인해주세요");
 			return;
 		}
-		if(isConvertibleToInt(commandDiv[2]) == false) {
+		if (isConvertibleToInt(commandDiv[2]) == false) {
 			System.out.println("3번째에 게시물 번호를 입력해주세요");
 			return;
 		}
@@ -175,20 +203,20 @@ public class ArticleController extends Controller{
 		}
 		return null;
 	}
-	
+
 	private boolean isConvertibleToInt(String str) {
 		try {
 			Integer.parseInt(str);
 			return true;
-		} catch (NumberFormatException e){
+		} catch (NumberFormatException e) {
 			return false;
 		}
 	}
 
 	public void makeTestData() {
 		System.out.println("Article 테스트 데이터가 생성되었습니다");
-		articles.add(new Article(1, 10, "제목 1", "내용 1", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
-		articles.add(new Article(2, 20, "제목 2", "내용 2", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
-		articles.add(new Article(3, 30, "제목 3", "내용 3", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
+		articles.add(new Article(1, 10, 3, "제목 1", "내용 1", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
+		articles.add(new Article(2, 20, 2, "제목 2", "내용 2", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
+		articles.add(new Article(3, 30, 2, "제목 3", "내용 3", Util.getNowDateTimeStr(), Util.getNowDateTimeStr()));
 	}
 }

@@ -8,7 +8,7 @@ import com.kkwo.AM.dto.Member;
 import com.kkwo.AM.util.Util;
 
 public class MemberController extends Controller {
-	private List<Member> members;
+	public static List<Member> members;
 	private Scanner sc;
 
 	int lastMemberId = 3;
