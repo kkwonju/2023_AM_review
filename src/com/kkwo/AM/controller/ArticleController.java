@@ -12,6 +12,9 @@ import com.kkwo.AM.util.Util;
 public class ArticleController extends Controller {
 	private List<Article> articles;
 	private Scanner sc;
+	private String actionMethodName;
+	private String command;
+	
 	int lastArticleId = 3;
 
 	public ArticleController(Scanner sc) {
@@ -21,21 +24,24 @@ public class ArticleController extends Controller {
 
 	@Override
 	public void doAction(String actionMethodName, String command) {
+		this.actionMethodName = actionMethodName;
+		this.command = command;
+		
 		switch (actionMethodName) {
 		case "write":
 			doWrite();
 			break;
 		case "list":
-			showList(command);
+			showList();
 			break;
 		case "detail":
-			showDetail(command);
+			showDetail();
 			break;
 		case "modify":
-			doModify(command);
+			doModify();
 			break;
 		case "delete":
-			doDelete(command);
+			doDelete();
 			break;
 		default:
 			System.out.println("해당 기능은 존재하지 않습니다");
@@ -57,7 +63,7 @@ public class ArticleController extends Controller {
 		lastArticleId++;
 	}
 
-	public void showList(String command) {
+	public void showList() {
 		if (articles.size() == 0) {
 			System.out.println("게시글이 없습니다");
 			return;
@@ -98,7 +104,7 @@ public class ArticleController extends Controller {
 		}
 	}
 
-	public void showDetail(String command) {
+	public void showDetail() {
 		String[] commandDiv = command.split(" ");
 		if (commandDiv.length < 3) {
 			System.out.println("명령어를 확인해주세요");
@@ -135,7 +141,7 @@ public class ArticleController extends Controller {
 		foundArticle.hit++;
 	}
 
-	public void doModify(String command) {
+	public void doModify() {
 		String[] commandDiv = new String[3];
 		commandDiv = command.split(" ");
 		if (commandDiv.length < 3) {
@@ -165,7 +171,7 @@ public class ArticleController extends Controller {
 		System.out.println(id + "번 게시글이 수정되었습니다"); // 사용자 입력 id값
 	}
 
-	public void doDelete(String command) {
+	public void doDelete() {
 		String[] commandDiv = command.split(" ");
 		if (commandDiv.length < 3) {
 			System.out.println("명령어를 확인해주세요");
