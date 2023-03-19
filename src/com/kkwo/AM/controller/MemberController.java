@@ -1,9 +1,9 @@
 package com.kkwo.AM.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.kkwo.AM.container.Container;
 import com.kkwo.AM.dto.Member;
 import com.kkwo.AM.util.Util;
 
@@ -14,7 +14,7 @@ public class MemberController extends Controller {
 	int lastMemberId = 3;
 
 	public MemberController(Scanner sc) {
-		this.members = new ArrayList<>();
+		this.members = Container.memberDao.members;
 		this.sc = sc;
 	}
 	

@@ -77,11 +77,16 @@
 18. 로그인 로그아웃 체크를 App 클래스에 추가
     + 명령어 미입력 시 재입력 요청
     + article delete 수정
-    
-TODO
 
 19. list와 detail에 작성자 이름 출력 중
     1.  article 생성 시 작성자의 id값이 들어가도록 v
     2. article 생성 시 작성자의 loginId값이 들어가도록
     
     article memberId와  member id를 비교
+    
+TODO
+
+20. container , DAO 구현
+    + 서로 관여하지 않는 두 공간이 접근할 수 있는
+    독립적인 공간 생성
+    + 데이터베이스와의 상호작용을 담당하는 객체

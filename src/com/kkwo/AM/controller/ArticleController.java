@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.kkwo.AM.container.Container;
 import com.kkwo.AM.dto.Article;
 import com.kkwo.AM.dto.Member;
 import com.kkwo.AM.util.Util;
@@ -14,7 +15,7 @@ public class ArticleController extends Controller {
 	int lastArticleId = 3;
 
 	public ArticleController(Scanner sc) {
-		this.articles = new ArrayList<>();
+		this.articles = Container.articleDao.articles;
 		this.sc = sc;
 	}
 
