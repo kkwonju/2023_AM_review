@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import com.kkwo.AM.container.Container;
 import com.kkwo.AM.dto.Member;
+import com.kkwo.AM.service.MemberService;
 import com.kkwo.AM.util.Util;
 
 public class MemberController extends Controller {
@@ -12,11 +13,12 @@ public class MemberController extends Controller {
 	private Scanner sc;
 	private String actionMethodName;
 	private String command;
+	private MemberService memberService;
 
 	int lastMemberId = 3;
 
 	public MemberController(Scanner sc) {
-		this.members = Container.memberDao.members;
+		this.memberService = Container.memberService;
 		this.sc = sc;
 	}
 	
@@ -45,7 +47,7 @@ public class MemberController extends Controller {
 	}
 
 	public void doJoin() {
-		int memberId = Container.memberDao.setNewId();
+		int memberId = memberService.setNewId();
 		String loginId = null;
 		String loginPw = null;
 		String userName = null;
@@ -61,7 +63,7 @@ public class MemberController extends Controller {
 				continue;
 			}
 			
-			if (isJoinableLoginId(loginId) != null) {
+			if (memberService.isJoinableLoginId(loginId) != null) {
 				System.out.println("이미 사용중인 아이디입니다");
 				continue;
 			}
@@ -101,7 +103,7 @@ public class MemberController extends Controller {
 		}
 		String regDate = Util.getNowDateTimeStr();
 		
-		members.add(new Member(memberId, regDate, regDate, loginId, loginPw, userName));
+		memberService.add(new Member(memberId, regDate, regDate, loginId, loginPw, userName));
 		System.out.println(memberId + "번 회원이 가입되었습니다");
 	}
 
@@ -117,12 +119,7 @@ public class MemberController extends Controller {
 				continue;
 			}
 			
-			for (Member member : members) {
-				if (member.loginId.equals(loginId)) {
-					foundRegisteredMember = member;
-					break;
-				}
-			}
+			foundRegisteredMember = memberService.getMemberByLoginId(loginId);
 			
 			if (foundRegisteredMember == null) {
 				System.out.println("일치하는 회원이 없습니다");
@@ -162,20 +159,13 @@ public class MemberController extends Controller {
 		System.out.println("가입 일자 : " + loginedMember.regDate);
 	}
 
-	private Member isJoinableLoginId(String loginId) {
-		for (Member member : members) {
-			if (member.loginId.equals(loginId)) {
-				return member;
-			}
-		}
-		return null;
-	}
+
 
 	public void makeTestData() {
 		System.out.println("Member 테스트 데이터가 생성되었습니다");
-		Container.memberDao.add(new Member(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test1", "0000", "kkwo1"));
-		Container.memberDao.add(new Member(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test2", "0000", "kkwo2"));
-		Container.memberDao.add(new Member(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test3", "0000", "kkwo3"));
+		memberService.add(new Member(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test1", "0000", "kkwo1"));
+		memberService.add(new Member(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test2", "0000", "kkwo2"));
+		memberService.add(new Member(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "test3", "0000", "kkwo3"));
 	}
 
 }

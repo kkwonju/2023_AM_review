@@ -27,4 +27,25 @@ public class MemberDao extends Dao {
 		lastId++;
 	}
 
+	public List<Member> getMembers() {
+		return members;
+	}
+
+	public Member isJoinableLoginId(String loginId) {
+		for (Member member : members) {
+			if (member.loginId.equals(loginId)) {
+				return member;
+			}
+		}
+		return null;
+	}
+
+	public Member getMemberByLoginId(String loginId) {
+		for(Member member : members) {
+			if(member.loginId.equals(loginId)) {
+				return member;
+			}
+		}
+		return null;
+	}
 }
