@@ -124,12 +124,14 @@ public class MemberController extends Controller {
 	}
 
 	public void showProfile() {
-		for (Member member : members) {
-			System.out.println("로그인 아이디 : " + member.loginId);
-			System.out.println("로그인 비밀번호 " + member.loginPw);
-			System.out.println("유저 이름 : " + member.userName);
-			System.out.println("가입 일자 : " + member.regDate);
+		if(isLogined() == false) {			
+			System.out.println("로그인 후 이용해주세요");
+			return;
 		}
+		System.out.println("로그인 아이디 : " + loginedMember.loginId);
+		System.out.println("로그인 비밀번호 " + loginedMember.loginPw);
+		System.out.println("유저 이름 : " + loginedMember.userName);
+		System.out.println("가입 일자 : " + loginedMember.regDate);
 	}
 
 	private Member isJoinableLoginId(String loginId) {

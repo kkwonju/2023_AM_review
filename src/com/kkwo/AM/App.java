@@ -8,37 +8,40 @@ import com.kkwo.AM.controller.MemberController;
 public class App {
 	public void start() {
 		System.out.println("== 프로젝트 시작 ==");
-		
+
 		Scanner sc = new Scanner(System.in);
-		
+
 		ArticleController articleController = new ArticleController(sc);
 		MemberController memberController = new MemberController(sc);
-		
+
 		articleController.makeTestData();
 		memberController.makeTestData();
-		
+
 		while (true) {
 			System.out.print("명령어 > ");
 			String command = sc.nextLine().trim();
-			
-			if(command.equals("member join")){
+
+			if (command.equals("member join")) {
 				memberController.doJoin();
-			
+
 			} else if (command.equals("member login")) {
 				memberController.doLogin();
-			
+
 			} else if (command.equals("member logout")) {
 				memberController.doLogout();
-			
+
+			} else if (command.equals("member profile")) {
+				memberController.showProfile();
+
 			} else if (command.startsWith("article list")) {
 				articleController.showList(command);
-				 
+
 			} else if (command.equals("article write")) {
 				articleController.doWrite();
 
 			} else if (command.startsWith("article detail")) {
 				articleController.showDetail(command);
-				
+
 			} else if (command.startsWith("article modify")) {
 				articleController.doModify(command);
 
